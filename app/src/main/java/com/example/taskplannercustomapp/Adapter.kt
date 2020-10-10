@@ -1,13 +1,17 @@
 package com.example.taskplannercustomapp
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.AdapterView.AdapterContextMenuInfo
+import android.view.MenuItem
+import android.view.ContextMenu
+import android.os.Bundle
+import android.view.View
 
-class Adapter(private val data: List<Task>): RecyclerView.Adapter<Adapter.ViewHolder>(){
+class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     //  private val listener:(Int) -> Unit)
 
 
@@ -23,11 +27,19 @@ class Adapter(private val data: List<Task>): RecyclerView.Adapter<Adapter.ViewHo
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // val item:Int =
         holder.bind(data[position])
+        /* Another approach
+        holder.itemView.setOnCreateContextMenuListener(){ contextMenu, _, _ ->
+            contextMenu.add("Add").setOnMenuItemClickListener {
+                true
+            }
+        }
 
+         */
     }
 
+
     //add inner
-    inner class ViewHolder(private val v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(private val v: View) : RecyclerView.ViewHolder(v), View.OnCreateContextMenuListener {
         private val taskName: TextView = v.findViewById(R.id.taskname)
         private val dueDate: TextView = v.findViewById(R.id.duedate)
         private val status: ImageView = v.findViewById(R.id.status)
@@ -43,12 +55,36 @@ class Adapter(private val data: List<Task>): RecyclerView.Adapter<Adapter.ViewHo
             {
                 status.setImageResource(R.drawable.ic_done_24px)
             }
-
+            v.setOnCreateContextMenuListener(this)
+            // status.setOnCreateContextMenuListener(status)
             v.setOnClickListener{
                 //Toast.makeText(v.context, "${item.y}  ${item.y}", Toast.LENGTH_LONG).show()
+
+            }
+
+        }
+        override fun onContextItemSelected(item: MenuItem?): Boolean{
+            return when (item!!.itemId) {
+                1 ->{
+                    Toast.makeText(v.context, "Modify", Toast.LENGTH_LONG).show()
+                    true
+                }
+                2 ->{
+                    Toast.makeText(v.context, "Delete", Toast.LENGTH_LONG).show()
+                    true
+                }
+                else -> true
             }
         }
+        // https://www.youtube.com/watch?v=fl5BB3I3MvQ&ab_channel=PRABEESHRK
+        override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+            //Set Header of Context Menu
+            menu!!.setHeaderTitle("Select Option")
+            // position, itemId, order, title
+            menu.add(this.adapterPosition, 1, 0, "Modify")
+            menu.add(this.adapterPosition, 2, 1, "Delete")
+        }
+
 
     }
-
 }
