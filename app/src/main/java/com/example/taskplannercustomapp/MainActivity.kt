@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setTitle("TY Task Planner")
 
         setContentView(R.layout.activity_main)
         initData()
@@ -39,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item!!.itemId) {
             1 ->{
-
                 Toast.makeText(applicationContext, "Modify", Toast.LENGTH_SHORT).show()
                 true
             }
@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.create -> {
+                supportActionBar?.setTitle("Create new Task (hard coded)")
                 Toast.makeText(applicationContext, "Create new Task", Toast.LENGTH_LONG).show()
                 true
             }
