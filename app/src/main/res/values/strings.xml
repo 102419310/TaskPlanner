@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TaskPlannerCustomApp</string>
+    <string name="create">Create</string>
+    <string name="remaining">Days Remaining:</string>>
 </resources>
