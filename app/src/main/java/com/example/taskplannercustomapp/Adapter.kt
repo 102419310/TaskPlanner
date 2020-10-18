@@ -13,7 +13,6 @@ import java.time.temporal.ChronoUnit
 
 class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     //  private val listener:(Int) -> Unit)
-
     //sync the list list
     var list = mutableListOf<Task>()
     fun Adapter(list: List<Task>)
@@ -31,16 +30,7 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // val item:Int =
         holder.bind(data[position])
-        /* Another approach
-        holder.itemView.setOnCreateContextMenuListener(){ contextMenu, _, _ ->
-            contextMenu.add("Add").setOnMenuItemClickListener {
-                true
-            }
-        }
-
-         */
     }
 
 
@@ -53,6 +43,8 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
 
 
         fun bind(item: Task) {
+
+
             taskName.text = item.taskName
             dueDate.text = item.dueDate
             val date1 = LocalDate.parse(item.dueDate)
@@ -62,13 +54,17 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
            if(days.toInt()>=0)
             {
                 dayLeft.text = days
+                status.setImageResource(R.drawable.ic_create_24px)
+
             }
             else
             {
                 dayLeft.text = "Due"
+                status.setImageResource(R.drawable.ic_done_24px)
+
             }
 
-
+/*
             if(item.status == "pending")
             {
                 status.setImageResource(R.drawable.ic_create_24px)
@@ -77,6 +73,8 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
             {
                 status.setImageResource(R.drawable.ic_done_24px)
             }
+
+ */
             v.setOnCreateContextMenuListener(this)
             // status.setOnCreateContextMenuListener(status)
             v.setOnClickListener{
