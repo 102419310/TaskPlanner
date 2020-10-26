@@ -16,7 +16,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="30dp"/>
 
     <TextView
         android:id="@+id/remain"
@@ -70,16 +70,18 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="60dp"
         app:srcCompat="@drawable/ic_content_paste_24px" />
+
     <ImageView
         android:id="@+id/status"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_toEndOf="@id/taskname"
         android:layout_alignBottom="@id/taskname"
+        android:layout_toEndOf="@id/taskname"
         tools:srcCompat="@tools:sample/avatars" />
+
     <RatingBar
         android:id="@+id/ratingBar"
         style="?android:attr/ratingBarStyleSmall"
