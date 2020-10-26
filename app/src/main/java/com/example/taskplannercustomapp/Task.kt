@@ -6,14 +6,15 @@ class Task {
     var taskName: String = ""
     var taskDescription: String = ""
     var dueDate:String = ""
-    var status:String = ""
+    var difficulty:Float = 0F
+    var done:Int = 0
     constructor()
-    {}
-    constructor(taskName:String, taskDescription:String, dueDate:String, status:String)
+    constructor(taskName:String, taskDescription:String, dueDate:String, difficulty:Float)
     {
         this.taskName = taskName
         this.taskDescription = taskDescription
         this.dueDate = dueDate
-        this.status = status
+        this.difficulty = difficulty
+        this.done = 0
     }
 }

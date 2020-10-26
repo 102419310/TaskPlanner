@@ -13,16 +13,18 @@ val TABLE_NAME = "TASKS"
 val COL_TASKNAME = "taskname"
 val COL_TASKDESCRIPTION = "description"
 val COL_DUEDATE = "duedate"
-val COL_STATUS = "status"
+val  COL_DIFFICULTY = "difficult"
+val  COL_DONE = "done"
 
 class Handler(context: Context):SQLiteOpenHelper(context, DATABASE_NAME,null,1)
 {
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable = "CREATE TABLE " + TABLE_NAME +" ("+
-                COL_TASKNAME + " VARCHAR(50)," +
-                COL_TASKDESCRIPTION + " VARCHAR(100)," +
-                COL_DUEDATE + " VARCHAR(20)," +
-                COL_STATUS + " VARCHAR(10));"
+                COL_TASKNAME + " VARCHAR(20) NOT NULL PRIMARY KEY," +
+                COL_TASKDESCRIPTION + " VARCHAR(50) NOT NULL," +
+                COL_DUEDATE + " VARCHAR(20) NOT NULL," +
+                COL_DIFFICULTY + " Float NOT NULL," +
+                COL_DONE + " INT NOT NULL);"
         db?.execSQL(createTable)
     }
 
@@ -37,8 +39,8 @@ class Handler(context: Context):SQLiteOpenHelper(context, DATABASE_NAME,null,1)
         cv.put(COL_TASKNAME, task.taskName)
         cv.put(COL_TASKDESCRIPTION, task.taskDescription)
         cv.put(COL_DUEDATE, task.dueDate)
-        cv.put(COL_STATUS, task.status)
-
+        cv.put(COL_DIFFICULTY, task.difficulty)
+        cv.put(COL_DONE,task.done)
         var result =  db.insert(TABLE_NAME, null, cv)
         if (result == (-1).toLong())
         {
@@ -65,9 +67,9 @@ class Handler(context: Context):SQLiteOpenHelper(context, DATABASE_NAME,null,1)
                 task.taskName = result.getString(result.getColumnIndex(COL_TASKNAME))
                 task.taskDescription = result.getString(result.getColumnIndex(COL_TASKDESCRIPTION))
                 task.dueDate = result.getString(result.getColumnIndex(COL_DUEDATE))
-                task.status = result.getString(result.getColumnIndex(COL_STATUS))
+                task.difficulty = result.getFloat(result.getColumnIndex(COL_DIFFICULTY))
+                task.done = result.getInt(result.getColumnIndex(COL_DONE))
                 list.add(task)
-                Log.i("msg","added")
 
             }while(result.moveToNext())
         }
@@ -80,6 +82,16 @@ class Handler(context: Context):SQLiteOpenHelper(context, DATABASE_NAME,null,1)
     {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, COL_TASKNAME + "=?", arrayOf(task.taskName))
+        db.close()
+    }
+
+    fun markAsDone(task: Task)
+    {
+        val cv = ContentValues()
+        val db = this.writableDatabase
+        //done to 1
+        cv.put(COL_DONE,1)
+        db.update(TABLE_NAME, cv,COL_TASKNAME + "=?", arrayOf(task.taskName))
         db.close()
     }
 }

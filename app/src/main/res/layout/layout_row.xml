@@ -41,6 +41,7 @@
         android:layout_marginBottom="20dp"
         android:layout_toEndOf="@id/remain"
         android:text="Days"
+
         android:textSize="15sp"
 
         android:textStyle="bold" />
@@ -53,12 +54,51 @@
         android:layout_marginStart="40dp"
         android:text="Due Date" />
 
+    <TextView
+        android:id="@+id/difficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/status"
+        android:layout_alignStart="@+id/taskIcon"
+        android:layout_marginStart="-20dp"
+        android:text="@string/difficulty"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/taskIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="60dp"
+        app:srcCompat="@drawable/ic_content_paste_24px" />
     <ImageView
         android:id="@+id/status"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="60dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_toEndOf="@id/taskname"
+        android:layout_alignBottom="@id/taskname"
         tools:srcCompat="@tools:sample/avatars" />
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/difficulty"
+        android:layout_alignStart="@+id/difficulty"
+        android:layout_marginStart="-9dp"
+        android:isIndicator="true" />
+
+    <ImageView
+        android:id="@+id/taskdone"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:background="@android:color/transparent"
+        tools:srcCompat="@tools:sample/avatars" />
+
 </RelativeLayout>

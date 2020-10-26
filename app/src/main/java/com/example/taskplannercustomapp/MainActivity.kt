@@ -1,6 +1,7 @@
 package com.example.taskplannercustomapp
 
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
@@ -18,14 +19,13 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 
-//class Task(val taskName: String, val taskDescription: String, val dueDate: String, val status: String)
-
 class MainActivity : AppCompatActivity() {
     var list = mutableListOf<Task>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.setTitle("TY Task Planner")
+
+        supportActionBar?.title = "TY Task Planner"
 
         setContentView(R.layout.activity_main)
         initData()
@@ -44,14 +44,13 @@ class MainActivity : AppCompatActivity() {
         var db = Handler(applicationContext)
         return when (item!!.itemId) {
             1 ->{
-                Toast.makeText(applicationContext, "Modify", Toast.LENGTH_SHORT).show()
+                db.markAsDone( list.elementAt(item.groupId))
+                initData()
+                taskList.adapter = Adapter(list.toList())
                 true
             }
             2 ->{
-            /*    var index = item.groupId + 1
-                list.removeAt(item.groupId)
-                taskList.adapter = Adapter(list.toList())
-             */
+
                 //delete the item with that groupID
                 //last two line is to present the delete update, then actually delete it in database
                 db.deleteData( list.elementAt(item.groupId))
@@ -63,30 +62,37 @@ class MainActivity : AppCompatActivity() {
             else ->        return super.onContextItemSelected(item)
         }
     }
-    private fun initData()
-    {
+    public fun initData() {
         var db = Handler(applicationContext)
+        var addData = false
 
-/*
-        val taskObject = Task("Task1", "Demo task.", "2022-10-25", "pending")
-        val taskObject2 = Task("Task2", "Demo task.", "2021-10-25", "pending")
-        val taskObject3 = Task("Task3", "Demo task.", "2020-05-25", "pending")
-        val taskObject4 = Task("Task4", "Demo task.", "2020-11-25", "pending")
-        val taskObject5 = Task("Task5", "Demo task.", "2020-01-25", "pending")
-        val taskObject6 = Task("Task6", "Demo task.", "2020-10-14", "pending")
+        //manual creation
+        if (addData)
+        {
+        val taskObject = Task("Task1", "Demo task.", "2022-10-25", 5F)
+        val taskObject2 = Task("Task2", "Demo task.", "2021-10-25", 0.5F)
+        val taskObject3 = Task("Task3", "Demo task.", "2020-05-25", 2F)
+        val taskObject4 = Task("Task4", "Demo task.", "2020-11-25", 4F)
+        val taskObject5 = Task("Task5", "Demo task.", "2020-01-25", 2F)
+        val taskObject6 = Task("Task6", "Demo task.", "2020-10-14", 3F)
 
-         db.insertData(taskObject)
-         db.insertData(taskObject2)
-         db.insertData(taskObject3)
-         db.insertData(taskObject4)
+        db.insertData(taskObject)
+        db.insertData(taskObject2)
+        db.insertData(taskObject3)
+        db.insertData(taskObject4)
         db.insertData(taskObject5)
         db.insertData(taskObject6)
-*/
+       }
+
         val list2 = db.readData()
         list2.sortBy {it.dueDate}
         list = list2
     }
-
+    override fun onResume(): Unit {
+        super.onResume()
+        initData()
+        taskList.adapter = Adapter(list.toList())
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu, menu)
@@ -96,8 +102,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.create -> {
-                supportActionBar?.setTitle("Create new Task (hard coded)")
-                Toast.makeText(applicationContext, "Create new Task", Toast.LENGTH_LONG).show()
+                    val i = Intent(this, DetailActivity::class.java).apply{
+                    }
+                    startActivity(i)
                 true
             }
             else -> super.onOptionsItemSelected(item)

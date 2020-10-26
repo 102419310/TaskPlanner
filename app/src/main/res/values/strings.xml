@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">TaskPlannerCustomApp</string>
     <string name="create">Create</string>
-    <string name="remaining">Days Remaining:</string>>
+    <string name="remaining">Days Remaining:</string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="task_name_hint">Duplicate tasks will be ignored</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_description">Task Description</string>
+    <string name="due_date">Due Date (YYYY-MM-DD)</string>
+    <string name="select_difficulty">Select Difficulty:</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>>
 </resources>
