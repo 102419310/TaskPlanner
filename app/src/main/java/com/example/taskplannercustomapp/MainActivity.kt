@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.title = "TY Task Planner"
+        supportActionBar?.title = "STickY Notes"
 
         setContentView(R.layout.activity_main)
         initData()
