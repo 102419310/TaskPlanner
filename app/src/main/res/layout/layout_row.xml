@@ -90,7 +90,10 @@
         android:layout_below="@id/difficulty"
         android:layout_alignStart="@+id/difficulty"
         android:layout_marginStart="-9dp"
-        android:isIndicator="true" />
+        android:isIndicator="true"
+        android:progressTint="@color/colorPrimary"
+
+        />
 
     <ImageView
         android:id="@+id/taskdone"

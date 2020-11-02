@@ -12,18 +12,20 @@ import android.view.View;
 import android.view.MenuItem
 import android.widget.RatingBar
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
-    //  private val listener:(Int) -> Unit)
+class Adapter(private var data: MutableList<Task>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     //sync the list list
-    var list = mutableListOf<Task>()
+   // var list = mutableListOf<Task>()
+
     fun Adapter(list: List<Task>)
     {
-        //list.sortedBy { it.dueDate}
-        this.list=list.sortedBy { it.dueDate }.toMutableList()
+        //this.list=list.sortedBy { it.dueDate }.toMutableList()
+     //   this.list=list.toList().sortedWith(compareBy({it.done},{it.dueDate})).toMutableList()
+
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -60,8 +62,6 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
            if(days.toInt()>=0)
             {
                 dayLeft.text = days
-              //  status.setImageResource(R.drawable.ic_create_24px)
-
             }
             else
             {
@@ -98,7 +98,7 @@ class Adapter(private val data: List<Task>) : RecyclerView.Adapter<Adapter.ViewH
 
     fun removeItem (position: Int)
     {
-        list.removeAt(position)
+       // list.removeAt(position)
     }
 
 }

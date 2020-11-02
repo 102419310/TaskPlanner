@@ -11,12 +11,11 @@ import android.widget.BaseAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +31,15 @@ class MainActivity : AppCompatActivity() {
 
         val taskList = findViewById<RecyclerView>(R.id.taskList)
 
-        //add horizontal line to seperate each task
+        //add horizontal line to separate each task
         taskList.addItemDecoration(DividerItemDecoration(this,
             DividerItemDecoration.VERTICAL))
-        taskList.adapter = Adapter(list.toList())
+        taskList.adapter = Adapter(list)
         taskList.layoutManager = LinearLayoutManager(this)
         registerForContextMenu(taskList)
 
+        var itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(taskList.adapter as Adapter))
+        itemTouchHelper.attachToRecyclerView(taskList)
     }
     override fun onContextItemSelected(item: MenuItem): Boolean {
         var db = Handler(applicationContext)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             1 ->{
                 db.markAsDone( list.elementAt(item.groupId))
                 initData()
-                taskList.adapter = Adapter(list.toList())
+                taskList.adapter = Adapter(list)
                 true
             }
             2 ->{
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 //last two line is to present the delete update, then actually delete it in database
                 db.deleteData( list.elementAt(item.groupId))
                 list.removeAt(item.groupId)
-                taskList.adapter = Adapter(list.toList())
+                taskList.adapter = Adapter(list)
 
                 true
             }
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
     public fun initData() {
         var db = Handler(applicationContext)
-        var addData = false
+        var addData = true
 
         //manual creation
         if (addData)
@@ -86,12 +87,14 @@ class MainActivity : AppCompatActivity() {
 
         val list2 = db.readData()
         list2.sortBy {it.dueDate}
-        list = list2
+        //put the done task at the bottom
+        val list3 = list2.sortedWith(compareBy({it.done},{it.dueDate}))
+        list = list3.toMutableList()
     }
     override fun onResume(): Unit {
         super.onResume()
         initData()
-        taskList.adapter = Adapter(list.toList())
+        taskList.adapter = Adapter(list)
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -110,4 +113,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
