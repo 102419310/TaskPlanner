@@ -145,7 +145,6 @@ class MainActivity : AppCompatActivity() {
        }
 
         val list2 = db.readData()
-        list2.sortBy {it.dueDate}
         //put the done task at the bottom
         val list3 = list2.sortedWith(compareBy({it.done},{it.dueDate}))
         list = list3.toMutableList()
