@@ -1,32 +1,21 @@
 package com.example.taskplannercustomapp
 
 import android.content.Context
-import android.util.Log
-import android.view.*
+import android.view.ContextMenu
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
-import android.view.ContextMenu;
-import android.view.View;
-import android.view.MenuItem
 import android.widget.RatingBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 class Adapter(private var data: MutableList<Task>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
-    //sync the list list
-   // var list = mutableListOf<Task>()
 
-    fun Adapter(list: List<Task>)
-    {
-        //this.list=list.sortedBy { it.dueDate }.toMutableList()
-     //   this.list=list.toList().sortedWith(compareBy({it.done},{it.dueDate})).toMutableList()
-
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater
@@ -50,8 +39,6 @@ class Adapter(private var data: MutableList<Task>) : RecyclerView.Adapter<Adapte
         private val status: ImageView = v.findViewById(R.id.status)
 
         fun bind(item: Task) {
-
-
             taskName.text = item.taskName
             dueDate.text = item.dueDate
             ratingBar.rating = item.difficulty
@@ -94,11 +81,6 @@ class Adapter(private var data: MutableList<Task>) : RecyclerView.Adapter<Adapte
             menu.add(this.adapterPosition, 1, 0, "Mark as complete")
             menu.add(this.adapterPosition, 2, 1, "Delete")
         }
-    }
-
-    fun removeItem (position: Int)
-    {
-       // list.removeAt(position)
     }
 
 }

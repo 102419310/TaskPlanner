@@ -3,19 +3,28 @@ package com.example.taskplannercustomapp
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.BaseAdapter
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ActionBarContextView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-
+import java.util.prefs.Preferences
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,12 +47,58 @@ class MainActivity : AppCompatActivity() {
         taskList.layoutManager = LinearLayoutManager(this)
         registerForContextMenu(taskList)
 
-        var itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(taskList.adapter as Adapter))
+
+        val itemTouchHelperCallback =
+            object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val db = Handler(applicationContext)
+                    val snackBar = Snackbar.make(
+                       window.decorView.findViewById(android.R.id.content), list.elementAt(viewHolder.adapterPosition).taskName+" Removed from task list.",
+                        Snackbar.LENGTH_LONG)
+                    snackBar.show()
+                    db.deleteData( list.elementAt(viewHolder.adapterPosition))
+                    list.removeAt(viewHolder.adapterPosition)
+                    //update the view
+                    (taskList.adapter as Adapter).notifyItemRemoved(viewHolder.adapterPosition)
+                }
+
+                override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                                         dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    val paint = Paint()
+                    //make sure the red background disappears as you release
+                    if (dX != 0f && isCurrentlyActive) {
+                        val itemView = viewHolder.itemView
+                        paint.color = Color.parseColor("#e03838")
+
+                        if (dX < 0) {
+                            val background = RectF(itemView.right.toFloat() + dX, itemView.top.toFloat(),
+                                itemView.right.toFloat(), itemView.bottom.toFloat())
+                            c.drawRect(background, paint)
+                    }
+                }
+
+            }}
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(taskList)
+
+
     }
     override fun onContextItemSelected(item: MenuItem): Boolean {
         var db = Handler(applicationContext)
-        return when (item!!.itemId) {
+        return when (item.itemId) {
             1 ->{
                 db.markAsDone( list.elementAt(item.groupId))
                 initData()
@@ -53,20 +108,24 @@ class MainActivity : AppCompatActivity() {
             2 ->{
 
                 //delete the item with that groupID
-                //last two line is to present the delete update, then actually delete it in database
+                val snackBar = Snackbar.make(
+                    window.decorView.findViewById(android.R.id.content), list.elementAt(item.groupId).taskName+" Removed from task list.",
+                    Snackbar.LENGTH_LONG)
+                snackBar.show()
                 db.deleteData( list.elementAt(item.groupId))
                 list.removeAt(item.groupId)
-                taskList.adapter = Adapter(list)
+                //update the view
+                (taskList.adapter as Adapter).notifyItemRemoved(item.groupId)
 
                 true
             }
             else ->        return super.onContextItemSelected(item)
         }
     }
+    //load the data from database, update the list
     public fun initData() {
         var db = Handler(applicationContext)
         var addData = true
-
         //manual creation
         if (addData)
         {
