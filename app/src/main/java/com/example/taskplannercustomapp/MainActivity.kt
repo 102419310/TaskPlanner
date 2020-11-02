@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
     //load the data from database, update the list
     public fun initData() {
         var db = Handler(applicationContext)
-        var addData = true
+        var addData = false
         //manual creation
         if (addData)
         {
